@@ -70,15 +70,15 @@ Now you have a MySQL database setup, all that's left is to populate it.
 
 ## Python Script
 
-Now either copy the python script to your Pi, or create one and copypaste the code by hand. Create a nice and neat folder for the project (who knows, maybe you'll expand it later on).
+Now copy the python script to your Pi
 ```
 cd ~
 mkdir Logger
 cd Logger
 ```
-Use your editor of choice to create the script. Personally, I prefer vi/vim but if you aren't sure just use nano.
+Use your nano or your editor of choice to create the script.
 ```
-nano buttons_script.py
+nano babylogger.py
 ```
 
 Paste in the contents of the python script and CTRL-X then Y to exit and save. Don't forget to change GPIO numbers, database name, and password to match what you created. At this point you should also change the button names so that they correspond to the labels whatever you decide those to be.
@@ -118,48 +118,62 @@ If everything is working well, there's one more thing to do.
 
 ## Running as Service on boot
 
-If you want to have it automatically run itself whenever your Pi starts up, you can create a SystemD service file.
-Create an empty file with your editor of choice:
+If you want to have the script run automatically whenever your Pi starts up, you can create a Systemd service file.
+Create an empty file with nano or your editor of choice:
 ```
-sudo nano /lib/systemd/system/babylogger.service
+sudo nano /etc/systemd/system/babylogger.service
 ```
-and then paste in the following (changing the name and the path if you've changed any of those)
+and then paste in the following (changing the username (default is pi) and the path if you've changed any of those)
 ```
 [Unit]
 Description=Baby Logger Service
-After=multi-user.target
+After=network.target
 
 [Service]
-Type=simple
 ExecStart=/usr/bin/python3 /home/pi/Logger/babylogger.py
-User=pi
 Restart=always
+User=pi
+WorkingDirectory=/home/pi/Logger/
+Environment=PYTHONUNBUFFERED=1
 
 [Install]
 WantedBy=multi-user.target
+
 ```
 Ctrl-X and then Y to save the file.
-Check permissions on the file, you may need to 
 
-Tell the system to use this serviced service:
+
+Run the following command to reload the systemd manager configuration:
 ```
 sudo systemctl daemon-reload
+
 ```
 
-Now start the script
+Enable the service so it starts automatically when the system boots:
+```
+sudo systemctl enable babylogger.service
+```
+
+Start the service manually to test it:
 ```
 sudo systemctl start babylogger.service
 ```
 
-Enable autorun
-```
-sudo systemctl enable babylogger.service
-```
-and you're done.
 
-To check on the status of your service (ensure it's running)
+To check on the status of your service:
 ```
-sudo journalctl -u babylogger.status
+sudo systemctl status babylogger.service
+```
+You should see something like:
+```
+● babylogger.service - Baby Logger Service
+   Loaded: loaded (/etc/systemd/system/babylogger.service; enabled; vendor preset: enabled)
+   Active: active (running) since Tue 2024-01-01 12:34:56 UTC; 5s ago
+ Main PID: 1234 (python3)
+    Tasks: 1 (limit: 4915)
+   Memory: 10.5M
+   CGroup: /system.slice/babylogger.service
+           └─1234 /usr/bin/python3 /path/to/babylogger.py
 ```
 
 This should have you up and running. Issue a graceful reboot and your system should come back up with your ```babylogger``` service running
