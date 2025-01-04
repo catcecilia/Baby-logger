@@ -91,32 +91,16 @@ Push any of your buttons, if you don't get any error messages - CTRL-C to end th
 Then open up your MySQL database again and check if anything has been written to the database.
 Hopefully it will now show you the date, time, and which button has been pressed. Now you can close the MySQL interface and move on to setting up the webpage.
 
-## Webpage
-
-On your webhost, create a subdirectory for your project. 
-```
-mkdir babylogger
-cd babylogger
-```
-Now you can either copy the index.php page directly into the folder or with your editor of choice manually copy-paste it in.
-```
-touch index.php
-nano index.php
-```
-Paste the contents there and edit the appropriate fields:
-* db_host
-* db_user
-* db_passwd
-* database
-* GPIO pins
-
-Ctrl-x and then Y to save the file (in nano)/
-
-At this point you should be greeted with a webpage with a table whenever you go to your webhost.
-
-If everything is working well, there's one more thing to do.
-
 ## Running as Service on boot
+
+Make sure that the script is executable
+```
+chmod +x /home/pi/Logger/babylogger.py
+```
+Test the script to confirm that it works
+```
+/path/to/babylogger.py
+```
 
 If you want to have the script run automatically whenever your Pi starts up, you can create a Systemd service file.
 Create an empty file with nano or your editor of choice:
@@ -168,6 +152,120 @@ You should see something like:
    CGroup: /system.slice/babylogger.service
            └─1234 /usr/bin/python3 /path/to/babylogger.py
 ```
+
+## Install Apache Web Server and PHP
+
+Update your system:
+```
+sudo apt update && sudo apt upgrade -y
+```
+
+Install Apache:
+```
+sudo apt install apache2 -y
+```
+
+Restart Apache to load PHP:
+```
+sudo systemctl restart apache2
+```
+
+Apache's default document root is /var/www/html. You need to place your index.php file in this directory.
+```
+sudo nano /var/www/html/index.php
+```
+
+Set permissions: Ensure the file is readable by the web server:
+```
+sudo chmod 644 /var/www/html/index.php
+```
+
+
+
+
+
+
+## Install MariaDB Server
+
+Update your system:
+```
+sudo apt update && sudo apt upgrade -y
+```
+
+Install MariaDB
+```
+sudo apt install mariadb-server -y
+```
+
+Start the MariaDB service:
+```
+sudo systemctl start mariadb
+```
+
+Enable MariaDB to start on boot:
+```
+sudo systemctl enable mariadb
+```
+
+Check the status to confirm it’s running:
+```
+sudo systemctl status mariadb
+```
+
+Run the security script to set a root password and improve security.
+When prompted:
+    Set a strong root password.
+    Remove anonymous users.
+    Disallow root login remotely (recommended for security).
+    Remove the test database.
+    Reload privilege tables.
+```
+sudo mysql_secure_installation
+```
+
+Log in to the MariaDB shell as the root user, use the root password that you just set.
+```
+sudo mysql -u root -p
+```
+
+To verify that MariaDB is working:
+```
+SHOW DATABASES;
+```
+
+### Create a Database and User
+
+
+
+
+
+
+
+
+On your webhost, create a subdirectory for your project. 
+```
+mkdir babylogger
+cd babylogger
+```
+Now you can either copy the index.php page directly into the folder or with your editor of choice manually copy-paste it in.
+```
+touch index.php
+nano index.php
+```
+Paste the contents there and edit the appropriate fields:
+* db_host
+* db_user
+* db_passwd
+* database
+* GPIO pins
+
+Ctrl-x and then Y to save the file (in nano)/
+
+At this point you should be greeted with a webpage with a table whenever you go to your webhost.
+
+If everything is working well, there's one more thing to do.
+
+
 
 This should have you up and running. Issue a graceful reboot and your system should come back up with your ```babylogger``` service running
 
