@@ -138,28 +138,21 @@ Environment=PYTHONUNBUFFERED=1
 
 [Install]
 WantedBy=multi-user.target
-
 ```
 Ctrl-X and then Y to save the file.
-
 
 Run the following command to reload the systemd manager configuration:
 ```
 sudo systemctl daemon-reload
-
 ```
-
 Enable the service so it starts automatically when the system boots:
 ```
 sudo systemctl enable babylogger.service
 ```
-
 Start the service manually to test it:
 ```
 sudo systemctl start babylogger.service
 ```
-
-
 To check on the status of your service:
 ```
 sudo systemctl status babylogger.service
