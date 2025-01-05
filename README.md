@@ -43,147 +43,6 @@ Using PIP, install the Python 3 MySQL library.
 sudo pip3 install pymysql
 ```
 
-## MySQL Database
-
-Log into your MySQL dashboard, then create a database with your user interface or issue the SQL command below.
-```
-CREATE DATABASE babylogger;
-```
-I called mine "babylogger". If you choose another name be sure to substitute it in the python script and the webpage.
-
-Select the database and create a user that will be submitting data to the table.
-```
-USE babylogger;
-CREATE USER 'logger'@'localhost' IDENTIFIED BY 'password';
-GRANT ALL PRIVILEGES ON babylogger.* TO 'logger'@'localhost';
-FLUSH PRIVILEGES;
-quit
-```
-This will create a user "logger" and give them the priveleges to work with our database. Substitute the `password` for your actual password.
-Next, create a table that will be used for logging events.
-```
-USE babylogger;
-CREATE TABLE buttondata (id INT, tdate DATE, ttime TIME, type TEXT);
-quit
-```
-Now you have a MySQL database setup, all that's left is to populate it.
-
-## Python Script
-
-Now copy the python script to your Pi
-```
-cd ~
-mkdir Logger
-cd Logger
-```
-Use your nano or your editor of choice to create the script.
-```
-nano babylogger.py
-```
-
-Paste in the contents of the python script and CTRL-X then Y to exit and save. Don't forget to change GPIO numbers, database name, and password to match what you created. At this point you should also change the button names so that they correspond to the labels whatever you decide those to be.
-You can try running the script with
-```
-sudo python3 babylogger.py
-```
-Push any of your buttons, if you don't get any error messages - CTRL-C to end the script.
-
-Then open up your MySQL database again and check if anything has been written to the database.
-Hopefully it will now show you the date, time, and which button has been pressed. Now you can close the MySQL interface and move on to setting up the webpage.
-
-## Running as Service on boot
-
-Make sure that the script is executable
-```
-chmod +x /home/pi/Logger/babylogger.py
-```
-Test the script to confirm that it works
-```
-/path/to/babylogger.py
-```
-
-If you want to have the script run automatically whenever your Pi starts up, you can create a Systemd service file.
-Create an empty file with nano or your editor of choice:
-```
-sudo nano /etc/systemd/system/babylogger.service
-```
-and then paste in the following (changing the username (default is pi) and the path if you've changed any of those)
-```
-[Unit]
-Description=Baby Logger Service
-After=network.target
-
-[Service]
-ExecStart=/usr/bin/python3 /home/pi/Logger/babylogger.py
-Restart=always
-User=pi
-WorkingDirectory=/home/pi/Logger/
-Environment=PYTHONUNBUFFERED=1
-
-[Install]
-WantedBy=multi-user.target
-```
-Ctrl-X and then Y to save the file.
-
-Run the following command to reload the systemd manager configuration:
-```
-sudo systemctl daemon-reload
-```
-Enable the service so it starts automatically when the system boots:
-```
-sudo systemctl enable babylogger.service
-```
-Start the service manually to test it:
-```
-sudo systemctl start babylogger.service
-```
-To check on the status of your service:
-```
-sudo systemctl status babylogger.service
-```
-You should see something like:
-```
-● babylogger.service - Baby Logger Service
-   Loaded: loaded (/etc/systemd/system/babylogger.service; enabled; vendor preset: enabled)
-   Active: active (running) since Tue 2024-01-01 12:34:56 UTC; 5s ago
- Main PID: 1234 (python3)
-    Tasks: 1 (limit: 4915)
-   Memory: 10.5M
-   CGroup: /system.slice/babylogger.service
-           └─1234 /usr/bin/python3 /path/to/babylogger.py
-```
-
-## Install Apache Web Server and PHP
-
-Update your system:
-```
-sudo apt update && sudo apt upgrade -y
-```
-
-Install Apache:
-```
-sudo apt install apache2 -y
-```
-
-Restart Apache to load PHP:
-```
-sudo systemctl restart apache2
-```
-
-Apache's default document root is /var/www/html. You need to place your index.php file in this directory.
-```
-sudo nano /var/www/html/index.php
-```
-
-Set permissions: Ensure the file is readable by the web server:
-```
-sudo chmod 644 /var/www/html/index.php
-```
-
-
-
-
-
 
 ## Install MariaDB Server
 
@@ -236,21 +95,32 @@ SHOW DATABASES;
 ### Create a Database and User
 
 
+## Install Apache Web Server and PHP
 
-
-
-
-
-
-On your webhost, create a subdirectory for your project. 
+Update your system:
 ```
-mkdir babylogger
-cd babylogger
+sudo apt update && sudo apt upgrade -y
 ```
-Now you can either copy the index.php page directly into the folder or with your editor of choice manually copy-paste it in.
+
+Install Apache:
 ```
-touch index.php
-nano index.php
+sudo apt install apache2 -y
+```
+
+Restart Apache to load PHP:
+```
+sudo systemctl restart apache2
+```
+Go to your Pi's IP address in a browser on a device connected to the same network as your Pi. You should see the default Apache page if everything is working correctly. 
+
+You will want to delete the default index.html file that is generated by Apache setup.
+```
+sudo rm /var/www/html/index.html
+```
+
+Apache's default document root is /var/www/html. You need to place your index.php file in this directory.
+```
+sudo nano /var/www/html/index.php
 ```
 Paste the contents there and edit the appropriate fields:
 * db_host
@@ -258,25 +128,112 @@ Paste the contents there and edit the appropriate fields:
 * db_passwd
 * database
 * GPIO pins
-
 Ctrl-x and then Y to save the file (in nano)/
 
-At this point you should be greeted with a webpage with a table whenever you go to your webhost.
-
-If everything is working well, there's one more thing to do.
-
-
-
-This should have you up and running. Issue a graceful reboot and your system should come back up with your ```babylogger``` service running
-
-## Read-only
-
-It might be a good idea to also set your Pi to be read-only. So long as you're logging all data elsewhere, there isn't much (anything) *on* the Pi that needs to be stored. Making your Pi read-only helps ensure you don't have any SD card corruption or OS problems from unexpected shutdowns. I used the Adafruit guide for setting up a [Read-only Raspberry Pi](https://learn.adafruit.com/read-only-raspberry-pi/).  
-I used GPIO 21 as my read/write jumper pin setting - this is why I left GPIO21 alone when assigning my pins before. *Be sure to give yourself a read/write jumper option!* Later on, you may want to go back and alter your MySQL server, password, or an LED blinking pattern or whatever. If you don't give yourself a way to still write to the SD card, you're painting yourself in a corner. _Create a read/write option._
-
-I ran into one hiccup with this Adafruit setup. For some reason the script they provide goofed up the ntp daemon so my Pi wasn't pulling the correct time. (Glad I have the read/write option.) I ran the following command and that seemed to restart my ntp client.
+Set permissions: Ensure the file is readable by the web server:
 ```
-sudo \etc\init.d\ntp start
+sudo chmod 644 /var/www/html/index.php
 ```
 
-Check your OS time with the ```date``` command. If the time is off, the time and date of an event you're logging will also be off.
+
+
+
+
+
+
+
+
+
+
+
+
+
+### Python Script
+
+Now copy the python script to your Pi
+```
+cd ~
+mkdir Logger
+cd Logger
+```
+Use nano or your editor of choice to create the script.
+```
+nano babylogger.py
+```
+
+Paste in the contents of the python script and CTRL-X then Y to exit and save. Don't forget to change GPIO numbers, database name, and password to match what you created. At this point you should also change the button names so that they correspond to the labels whatever you decide those to be.
+You can try running the script with
+```
+sudo python3 babylogger.py
+```
+Push any of your buttons, if you don't get any error messages - CTRL-C to end the script.
+
+Then open up your MySQL database again and check if anything has been written to the database.
+Hopefully it will now show you the date, time, and which button has been pressed. Now you can close the MySQL interface and move on to setting up the webpage.
+
+
+## Running as Service on boot
+
+Make sure that the script is executable
+```
+chmod +x /home/pi/Logger/babylogger.py
+```
+Test the script to confirm that it works
+```
+/home/pi/Logger/babylogger.py
+```
+
+If you want to have the script run automatically whenever your Pi starts up, you can create a Systemd service file.
+Create an empty file with nano or your editor of choice:
+```
+sudo nano /etc/systemd/system/babylogger.service
+```
+and then paste in the following (changing the username (default is pi) and the path if you've changed any of those)
+```
+[Unit]
+Description=Baby Logger Service
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/python3 /home/pi/Logger/babylogger.py
+Restart=always
+User=pi
+WorkingDirectory=/home/pi/Logger/
+Environment=PYTHONUNBUFFERED=1
+
+[Install]
+WantedBy=multi-user.target
+```
+Ctrl-X and then Y to save the file.
+
+Run the following command to reload the systemd manager configuration:
+```
+sudo systemctl daemon-reload
+```
+Enable the service so it starts automatically when the system boots:
+```
+sudo systemctl enable babylogger.service
+```
+Start the service manually to test it:
+```
+sudo systemctl start babylogger.service
+```
+To check on the status of your service:
+```
+sudo systemctl status babylogger.service
+```
+You should see something like:
+```
+● babylogger.service - Baby Logger Service
+   Loaded: loaded (/etc/systemd/system/babylogger.service; enabled; vendor preset: enabled)
+   Active: active (running) since Tue 2024-01-01 12:34:56 UTC; 5s ago
+ Main PID: 1234 (python3)
+    Tasks: 1 (limit: 4915)
+   Memory: 10.5M
+   CGroup: /system.slice/babylogger.service
+           └─1234 /usr/bin/python3 /path/to/babylogger.py
+```
+This should have you up and running. Reboot and your system should come back up with your ```babylogger``` service running
+```
+sudo reboot now
+```
