@@ -9,21 +9,14 @@ Pictures of my first build are posted on Imgur:
 
 ## Hardware
 
-* 1 - [Pi Zero W](https://www.amazon.com/Raspberry-Pi-Zero-Wireless-model/dp/B06XFZC3BX/ref=as_li_ss_tl?keywords=Pi+Zero+W&qid=1568671481&sr=8-3&linkCode=ll1&tag=neoduxcom-20&linkId=57dd1953d211a431ff6ac29425d3023c&language=en_US)
-* 1 - [8+Gb microSD card](https://www.amazon.com/Sandisk-Ultra-Micro-UHS-I-Adapter/dp/B073K14CVB/ref=as_li_ss_tl?ie=UTF8&linkCode=ll1&tag=neoduxcom-20&linkId=58785ae4e36c928c594fe4e413d5cd1a&language=en_US)
-* 1 - [MicroUSB Power supply](https://www.amazon.com/Raspberry-Supply-Charger-Adapter-Switch/dp/B07V7T93MY/ref=as_li_ss_tl?ie=UTF8&linkCode=ll1&tag=neoduxcom-20&linkId=7634220d688133a6b0b4c4adc850e2d3&language=en_US)
-* 3 - [30mm arcade pushbuttons](https://www.amazon.com/Easyget-Standard-Arcade-Button-Microswitch/dp/B07D9C18MS/ref=as_li_ss_tl?ie=UTF8&linkCode=ll1&tag=neoduxcom-20&linkId=0c961811b57f9e40f54a9b4897e63890&language=en_US)
-* 6 - [Jumper wires](https://www.amazon.com/Multicolored-Breadboard-Dupont-Jumper-Wires/dp/B073X7P6N2/ref=as_li_ss_tl?ie=UTF8&linkCode=ll1&tag=neoduxcom-20&linkId=2737a16c6e03c507f43c9efb6f64579c&language=en_US)
-* 1 - [LED, 5mm (T 1-3/4), red](https://www.amazon.com/100pcs-Ultra-Bright-Emitting-Diffused/dp/B01GE4WHK6/ref=as_li_ss_tl?ie=UTF8&linkCode=ll1&tag=neoduxcom-20&linkId=68c44e1f176e93f2aea4a006098af3eb&language=en_US)
-* 1 - [1/8W carbon film 220-ohm resistor](https://www.amazon.com/Watt-Carbon-Film-Resistors-5-Pack/dp/B007Z7MPRM/ref=as_li_ss_tl?ie=UTF8&linkCode=ll1&tag=neoduxcom-20&linkId=ed181e89698ee3188719301a8d94f075&language=en_US) (I even saw a deal for 100 LEDs *and* resistors on Amazon - so look for [something like this](https://www.amazon.com/EDGELEC-Diffused-Resistors-Included-Emitting/dp/B077X95F7C/ref=as_li_ss_tl?ie=UTF8&linkCode=ll1&tag=neoduxcom-20&linkId=4237ce09b0ba65da9d2774ff98de0a88&language=en_US).)
+* 1 - Pi Zero W
+* 1 - 8+Gb microSD card
+* 1 - MicroUSB Power supply
+* 3 - 30mm arcade pushbuttons
+* 6 - Jumper wires
+* 1 - 
 
-There's nothing special about any of the hardware listed. Get whatever is cheapest. If you have a 300-ohm resistor and a 3mm LED, that's fine; use those. If you already have a full size Pi, use it. In fact, I already had the Pi Zero W on hand, they're $5 at Microcenter if you live near one.
-I used a Pi Zero W, again most any model would do - you will want wifi though. For making connections even easier (and later reuse of the Pi - so I don't have to solder wires in place), I found these [40-pin sockets](https://www.amazon.com/gp/product/B07D48WZTR/ref=as_li_ss_tl?ie=UTF8&linkCode=ll1&tag=neoduxcom-20&linkId=771e0a06d001ef4879ca458e0662131f&language=en_US) for the Pi. (If you're new to soldering, be careful not to bridge any two pins together!)
-For input, I used three [30mm arcade-style pushbuttons](https://www.amazon.com/Easyget-Standard-Arcade-Button-Microswitch/dp/B07D9C18MS/ref=as_li_ss_tl?ie=UTF8&linkCode=ll1&tag=neoduxcom-20&linkId=0c961811b57f9e40f54a9b4897e63890&language=en_US) for ease of use. (Big buttons let the user see and press the button rather than small ones - small ones work fine for testing.) 
 
-I connected the buttons to pins 13, 19, 26, and a common ground using jumper wires. You may choose [any GPIO pins you want](https://i.stack.imgur.com/yHddo.png), but be sure to note which ones you used and adjust the numbers in the Python script. You might notice the pins I use are all clustered near one another. I did not use Pin 21 and the GND pine by it because I'm reserving those for the [Adafruit Read-Only Pi](https://learn.adafruit.com/read-only-raspberry-pi/) write-pin jumper
-
-I configured my pi to run headless since it does not require any rich, graphical user feedback. I installed a red 5mm LED on pin 16 with a 220-ohm resistor inline to act as a status light. It gives the user feedback as to which event was logged and could be setup to alert the user if there was an error. I did all my setup through ssh over a wireless connection. There are plenty of online tutorials for how to accomplish this by putting files in the /boot directory on the SD card.
 
 ## Updating OS and installing necessary packages
 
