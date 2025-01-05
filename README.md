@@ -45,7 +45,8 @@ pip install pymysql
 
 
 
-###Update Pi to your current time zone
+###  Update Pi to your current time zone
+
 Open the raspi-config Tool: Run the following command in the terminal:
 ```
 sudo raspi-config
