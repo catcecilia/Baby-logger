@@ -38,11 +38,47 @@ Install Python 3's PIP tool for installing Python libraries.
 ```
 sudo apt-get install python3-pip
 ```
-Using PIP, install the Python 3 Mariadb library.
+Using PIP, install the Python 3 pymysql library.
 ```
-pip install mariadb
+pip install pymysql
 ```
-Update Pi to your current time zone
+###Update Pi to your current time zone
+Open the raspi-config Tool: Run the following command in the terminal:
+```
+sudo raspi-config
+```
+Navigate to "Localisation Options":
+
+    In the raspi-config menu, use the arrow keys to navigate.
+    Select 5 Localisation Options (or a similar option depending on your version of raspi-config).
+    Press Enter.
+
+Select "Change Timezone":
+
+    From the Localisation Options menu, select Change Timezone.
+    Press Enter.
+
+Choose Your Geographic Area:
+
+    A list of geographic areas (e.g., Europe, America, Asia) will appear.
+    Use the arrow keys to select your region (e.g., America).
+    Press Enter.
+
+Choose Your Time Zone:
+
+    After selecting the geographic area, you'll see a list of time zones within that area.
+    Select the appropriate time zone (e.g., New_York for EST in America).
+    Press Enter.
+
+Finish and Exit:
+
+    Once you've set the time zone, you'll be returned to the raspi-config menu.
+    Select Finish and press Enter.
+
+Verify the correct time zone:
+```
+timedatectl
+```
 
 
 
