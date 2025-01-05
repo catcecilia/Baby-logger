@@ -148,7 +148,7 @@ sudo chmod 644 /var/www/html/index.php
 
 
 
-### Python Script
+## Python Script
 
 Now copy the python script to your Pi
 ```
@@ -172,7 +172,7 @@ Then open up your MySQL database again and check if anything has been written to
 Hopefully it will now show you the date, time, and which button has been pressed. Now you can close the MySQL interface and move on to setting up the webpage.
 
 
-## Running as Service on boot
+### Running as Service on boot
 
 Make sure that the script is executable
 ```
