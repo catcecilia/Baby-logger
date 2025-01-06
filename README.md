@@ -8,12 +8,13 @@ Pictures of my build are posted on Imgur: https://imgur.com/a/fzZuCb8
 
 ## Hardware
 
-* 1 - Pi Zero W
-* 1 - 8+Gb microSD card
-* 1 - MicroUSB Power supply
-* 3 - 30mm arcade pushbuttons
-* 6 - Jumper wires
-* 1 - 
+* 1x - Pi Zero W
+* 1x - 8+Gb microSD card
+* 1x - MicroUSB Power supply
+* 8x - 30mm arcade pushbuttons
+* 8x - arcade button connectors
+* 10x - Jumper wires and connectors
+
 
 
 
