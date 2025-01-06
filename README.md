@@ -2,7 +2,7 @@
 This project logs baby functions and related care and displays them on a webpage.
 Many pediatricians recommend tracking your baby's feeding patterns, diaper changes, sleep patterns, etc. This is valuable information if there is a problem early on. The doctor can use this information to help with a diagnosis.
 
-Pictures of my build are posted on Imgur: 
+Pictures of my build are posted on Imgur: https://imgur.com/a/fzZuCb8
 
 [The project was forked from [tommygober's Babby-logger project](https://github.com/tommygober/Baby-logger).]
 
