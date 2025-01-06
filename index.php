@@ -57,7 +57,7 @@ if (!$results) {
 
 <html>
 <head>
-    <title>Gabi Logger 👶🏻</title>
+    <title>Baby Logger 👶🏻</title>
     <style>
         body {
             background-color: #e6f2ff;
