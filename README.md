@@ -2,18 +2,16 @@
 This project logs baby functions and related care and displays them on a webpage.
 Many pediatricians recommend tracking your baby's feeding patterns, diaper changes, sleep patterns, etc. This is valuable information if there is a problem early on. The doctor can use this information to help with a diagnosis.
 
-Pictures of my build are posted on Imgur: https://imgur.com/a/fzZuCb8
 
-[The project was forked from [tommygober's Babby-logger project](https://github.com/tommygober/Baby-logger).]
+[This project was formed from [TriceratopsLab's Baby Logger project](https://github.com/TriceratopsLabs/Baby-logger).]
+[The original project was forked from [tommygober's Babby-logger project](https://github.com/tommygober/Baby-logger).]
 
 ## Hardware
 
-* 1x - Pi Zero W
+* 1x - RPI
 * 1x - 8+Gb microSD card
 * 1x - MicroUSB Power supply
-* 8x - 30mm arcade pushbuttons
-* 8x - arcade button connectors
-* 10x - Jumper wires and connectors
+* Macro Keys/Stream Controller
 
 
 
@@ -189,7 +187,7 @@ Paste the contents there and edit the appropriate fields:
 * db_user
 * db_passwd
 * database
-* GPIO pins
+* Key press
 Ctrl-x and then Y to save the file (in nano)/
 
 Set permissions: Ensure the file is readable by the web server:
@@ -223,7 +221,7 @@ Use nano or your editor of choice to create the script.
 nano babylogger.py
 ```
 
-Paste in the contents of the python script and CTRL-X then Y to exit and save. Don't forget to change GPIO numbers, database name, and password to match what you created. At this point you should also change the button names so that they correspond to the labels whatever you decide those to be.
+Paste in the contents of the python script and CTRL-X then Y to exit and save. Don't forget to change key presses, database name, and password to match what you created. At this point you should also change the button names so that they correspond to the labels whatever you decide those to be.
 You can try running the script with
 ```
 sudo python3 babylogger.py
